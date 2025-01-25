@@ -1,0 +1,19 @@
+# Environment files
+.env
+.env.local
+.env.*
+*.env
+
+# Environment directories
+.venv/
+venv/
+ENV/
+
+# Other environment-related files
+.env.development
+.env.test
+.env.production
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local 
