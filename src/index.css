@@ -1,0 +1,9 @@
+.content-container {
+    padding: 20px;
+    margin-top: 60px; /* Adjust based on your navigation height */
+}
+
+.nav-link.active {
+    background-color: oklch(44.889% 0.15545 -73.341);
+    color: white;
+} 

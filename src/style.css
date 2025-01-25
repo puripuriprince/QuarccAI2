@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+ box-sizing: border-box;
+ border: 0px solid rgb(229, 231, 235);
+ border-color: oklch(92.191%0 none);
+ }
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); } /* Adjust the value for more or less bounce */
+    100% { transform: translateY(0); }
+}
+
+.activity-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.activity-card:hover {
+    animation: bounce 0.5s ease-in-out; /* Adjust duration for speed */
+}
+
+.nav-link:hover {
+    background-color: rgba(200, 162, 255, 0.5); /* Light purple color */
+    color: oklch(96.833%_0.01405_-72.601); /* Adjust text color if needed */
+}
+
+.nav-link.active {
+    background-color: oklch(44.889% 0.15545 -73.341);  /* Updated to match "The Fund" button color */
+    color: oklch(100% 0 0); /* Updated to use oklch format for white */
+}
+
+.cta-wrapper {
+  width: 100vw;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  background-color: #e6e6fa; /* Light purple */
+  padding: 2rem 0;
+}
+
+.cta-container {
+  max-width: 1200px; /* or whatever your site's content width is */
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+    

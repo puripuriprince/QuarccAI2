@@ -1,0 +1,11 @@
+flask
+flask-cors
+python-dotenv
+openai
+requests
+beautifulsoup4
+flask-sqlalchemy
+PyJWT 
+
+# run the backend
+# and build the frontend, and serve it
