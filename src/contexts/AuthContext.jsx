@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
-const API_URL = 'http://127.0.0.1:5000/api';
+const API_URL = 'http://localhost:5000/api';
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
@@ -16,10 +16,15 @@ export function AuthProvider({ children }) {
             // Verify token with backend
             fetch(`${API_URL}/auth/verify`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('Token verification failed');
+                return res.json();
+            })
             .then(data => {
                 if (data.user) {
                     setUser(data.user);
@@ -45,12 +50,18 @@ export function AuthProvider({ children }) {
             const response = await fetch(`${API_URL}/auth/signup`, {
                 method: 'POST',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(userData),
             });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Signup failed');
+            }
+            
             const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Signup failed');
             return data;
         } catch (err) {
             setError(err.message);
@@ -68,17 +79,24 @@ export function AuthProvider({ children }) {
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(credentials),
             });
             
             console.log('Response status:', response.status);
-            const data = await response.json();
-            console.log('Response data:', data);
             
             if (!response.ok) {
-                throw new Error(data.error || 'Login failed');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Login failed');
+            }
+            
+            const data = await response.json();
+            console.log('Login response:', data);
+            
+            if (!data.token || !data.user) {
+                throw new Error('Invalid response format');
             }
             
             setUser(data.user);
@@ -104,13 +122,19 @@ export function AuthProvider({ children }) {
             const response = await fetch(`${API_URL}/query`, {
                 method: 'POST',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ query })
             });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Query failed');
+            }
+            
             const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Query failed');
             return data;
         } catch (err) {
             setError(err.message);
@@ -133,4 +157,4 @@ export function AuthProvider({ children }) {
     );
 }
 
-export const useAuth = () => useContext(AuthContext); 
+export const useAuth = () => useContext(AuthContext);

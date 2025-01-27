@@ -5,7 +5,17 @@ openai
 requests
 beautifulsoup4
 flask-sqlalchemy
-PyJWT 
+PyJWT
+langchain
+huggingface-hub
+chromadb
+sentence-transformers  # Required for HuggingFaceEmbeddings
+faiss-cpu  # Vector similarity search library
+
+# Additional dependencies that might be needed by the above packages
+typing-extensions>=4.5.0
+pydantic>=2.0.0
+SQLAlchemy>=2.0.0
 
 # run the backend
 # and build the frontend, and serve it
