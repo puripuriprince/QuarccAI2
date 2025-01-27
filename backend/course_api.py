@@ -1,11 +1,22 @@
 import requests
 import logging
 import json
+import re
 
 logger = logging.getLogger(__name__)
 
 class CourseAPI:
     BASE_URL = "https://concordia-courses-production.up.railway.app"
+    
+    @staticmethod
+    def parse_course_code(query):
+        """Parse course code from query (e.g., 'COMP 352' -> 'COMP352')"""
+        # Match pattern like "COMP 352" or "COMP352"
+        pattern = r'([A-Za-z]+)\s*(\d{3})'
+        match = re.search(pattern, query.upper())
+        if match:
+            return f"{match.group(1)}{match.group(2)}"
+        return None
     
     @staticmethod
     def search(query, limit=5):
@@ -24,9 +35,40 @@ class CourseAPI:
             print(f"Query: '{query}'")
             print(f"Limit: {limit}")
             
-            url = f"{CourseAPI.BASE_URL}/api/v1/search/course"
-            print(f"URL: {url}")
+            # Parse course code if present
+            course_id = CourseAPI.parse_course_code(query)
+            if course_id:
+                print(f"Detected course code: {course_id}")
+                
+                # Use the direct course endpoint
+                url = f"{CourseAPI.BASE_URL}/api/v1/courses/{course_id}"
+                headers = {
+                    'Accept': 'application/json'
+                }
+                
+                print(f"\nRequest URL: {url}")
+                
+                response = requests.get(url, headers=headers)
+                print(f"\nResponse Status: {response.status_code}")
+                
+                try:
+                    result = response.json()
+                    print(f"\nRaw Response Body:")
+                    print(json.dumps(result, indent=2))
+                    
+                    if result.get('status') == 'OK' and result.get('payload'):
+                        print(f"\nFound exact match for {course_id}")
+                        return [result['payload']]  # Return as list for consistency
+                    
+                    print(f"\nNo exact match found for {course_id}")
+                    
+                except json.JSONDecodeError:
+                    print(f"\nInvalid JSON Response. Raw Text:")
+                    print(response.text)
+                    return []
             
+            # Fall back to general search if no course code or exact match not found
+            url = f"{CourseAPI.BASE_URL}/api/v1/search/course"
             params = {
                 "query": query,
                 "limit": limit
@@ -35,36 +77,23 @@ class CourseAPI:
                 'Accept': 'application/json'
             }
             
-            print(f"\nRequest Parameters: {json.dumps(params, indent=2)}")
-            print(f"Request Headers: {json.dumps(headers, indent=2)}")
+            print(f"\nFalling back to search endpoint")
+            print(f"URL: {url}")
+            print(f"Parameters: {json.dumps(params, indent=2)}")
             
             response = requests.get(url, params=params, headers=headers)
-            
             print(f"\nResponse Status: {response.status_code}")
-            print(f"Response Headers: {json.dumps(dict(response.headers), indent=2)}")
             
             try:
                 result = response.json()
-                print(f"\nRaw Response Body:")
-                print(json.dumps(result, indent=2))
-            except json.JSONDecodeError:
-                print(f"\nInvalid JSON Response. Raw Text:")
-                print(response.text)
+                if result.get('status') == 'OK' and isinstance(result.get('payload'), list):
+                    courses = result['payload']
+                    print(f"\nFound {len(courses)} courses in search")
+                    return courses[:limit]
+            except:
                 return []
             
-            response.raise_for_status()
-            
-            if result.get('status') == 'OK' and isinstance(result.get('payload'), list):
-                courses = result['payload']
-                print(f"\nFound {len(courses)} courses:")
-                for i, course in enumerate(courses, 1):
-                    print(f"\nCourse {i} Details:")
-                    print(json.dumps(course, indent=2))
-                return courses
-            else:
-                print(f"\nUnexpected response format:")
-                print(json.dumps(result, indent=2))
-                return []
+            return []
                 
         except requests.RequestException as e:
             print(f"\nRequest Error: {str(e)}")

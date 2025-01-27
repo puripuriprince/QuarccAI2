@@ -21,7 +21,7 @@ function HeaderActions() {
                 </a>
             )}
             <Link 
-                to="/underConstruction"
+                to="/quantFund"
                 className="h-9 px-6 text-sm leading-5 inline-flex font-medium text-[oklch(96.833%_0.01405_-72.601)] ease-in-out items-center justify-center duration-[0.15s] whitespace-nowrap transition-colors [background-color:oklch(44.889%_0.15545_-73.341)] shadow-[oklch(0%_0_none_/_0)_0px_0px_0px_0px,oklch(0%0_none/0)_0px_0px_0px_0px,oklch(0%_0_none//_0.1)_0px_1px_3px_0px,oklch(0%0_none/0.1)_0px_1px_2px_-1px] no-underline"
                 style={{ borderRadius: "9999px" }}
             >
