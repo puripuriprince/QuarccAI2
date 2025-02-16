@@ -3,7 +3,7 @@ import React from 'react';
 function ConuAIGuide() {
     const guides = [
         {
-            title: "Getting Started with ConuAI",
+            title: "Course Search",
             icon: "🤖",
             content: [
                 "Ask questions in a clear, specific manner",
@@ -13,7 +13,7 @@ function ConuAIGuide() {
             ]
         },
         {
-            title: "Student Life at Concordia",
+            title: "Photobooth",
             icon: "🎓",
             content: [
                 "Which clubs should you join based on your interests?",
@@ -24,7 +24,7 @@ function ConuAIGuide() {
             ]
         },
         {
-            title: "Montreal Student Life",
+            title: "Scheduler",
             icon: "🌆",
             content: [
                 "Get an OPUS card for public transit",

@@ -158,6 +158,12 @@ def query():
                 formatted_courses = []
                 for i, course in enumerate(course_info, 1):
                     if isinstance(course, dict):
+                        # Add difficulty and experience metrics
+                        avg_difficulty = course.get('avgDifficulty', 0)
+                        avg_experience = course.get('avgExperience', 0)
+                        difficulty_dist = course.get('difficultyDistribution', {})
+                        experience_dist = course.get('experienceDistribution', {})
+                        
                         course_text = (
                             f"Course {i}:\n"
                             f"  Course: {course.get('subject', '')} {course.get('catalog', '')}\n"
@@ -166,7 +172,11 @@ def query():
                             f"  Prerequisites: {course.get('prerequisites', 'None')}\n"
                             f"  Credits: {course.get('credits', 'N/A')}\n"
                             f"  Department: {course.get('department', 'N/A')}\n"
-                            f"  Terms Offered: {', '.join(course.get('terms', []))}"
+                            f"  Terms Offered: {', '.join(course.get('terms', []))}\n"
+                            f"  Average Difficulty: {avg_difficulty}/5\n"
+                            f"  Average Experience: {avg_experience}/5\n"
+                            f"  Difficulty Distribution: {difficulty_dist}\n"
+                            f"  Experience Distribution: {experience_dist}"
                         )
                         formatted_courses.append(course_text)
                         print(f"\n{course_text}")

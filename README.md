@@ -33,6 +33,8 @@ npm run build
 ```bash
 cd backend
 python app.py
+
+serve build -s
 ```
 
 The application will be served at http://localhost:5000. The Flask server will serve both the API endpoints and the static frontend files.

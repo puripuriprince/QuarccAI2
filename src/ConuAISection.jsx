@@ -112,7 +112,7 @@ function ConuAISection() {
                     </div>
 
                     <div className="flex flex-wrap items-center justify-center gap-2 px-4">
-                        {['Clubs and ECs', 'Internships', 'Scholarships', 'Scheduling', 'Bureaucracy'].map((tag) => (
+                        {['Clubs and ECs', 'Internships', 'Scholarships', 'Courses', 'Bureaucracy'].map((tag) => (
                             <div 
                                 key={tag} 
                                 onClick={() => {
