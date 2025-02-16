@@ -9,6 +9,7 @@ PyJWT
 langchain
 huggingface-hub
 chromadb
+langchain-community
 sentence-transformers  # Required for HuggingFaceEmbeddings
 faiss-cpu  # Vector similarity search library
 
